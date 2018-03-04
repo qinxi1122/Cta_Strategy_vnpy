@@ -164,14 +164,22 @@ class TripleMAStrategy04(CtaTemplate):
             if bar.close > self.ma31 and self.ma11 > self.ma31 \
                     and self.ma10 < self.ma20 and self.ma11 > self.ma21\
                     and self.ma31 > ma3_ma5 and self.ma11 > ma1_ma5:
+
                 self.longEntry = bar.close
                 self.buy(self.longEntry, self.fixedSize, True)
                 self.policy.entryPrice = self.longEntry
                 self.policy.exitOnStopPrice = self.policy.entryPrice - self.atrValue * self.stoploss
-                print bar.datetime
-                print "In buy"
-                print self.policy.exitOnStopPrice
-                print bar.close
+
+                # 记录log
+                log = "\n{0} Buy : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                      " ma10:{0}; ma11:{1}; ma20:{2}; ma21:{3}; ma30:{4};ma31:{5}\n".format(self.ma10,self.ma11,self.ma20,self.ma21,self.ma30,self.ma31) + \
+                    "ma1_ma5:{0}; ma3_ma5:{1}\n".format(ma1_ma5,ma3_ma5)+\
+                    "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice)
+                self.writeCtaLog(log)
+                # print bar.datetime
+                # print "In buy"
+                # print self.policy.exitOnStopPrice
+                # print bar.close
 
             # 开空, bar.close < MA120,MA10 < MA120,MA10 下穿MA20, MA10,MA120向下
             elif bar.close < self.ma31 and self.ma11 < self.ma31 \
@@ -181,10 +189,19 @@ class TripleMAStrategy04(CtaTemplate):
                 self.short(self.shortEntry, self.fixedSize, True)
                 self.policy.entryPrice = self.shortEntry
                 self.policy.exitOnStopPrice = self.policy.entryPrice + self.atrValue * self.stoploss
-                print bar.datetime
-                print "In short"
-                print self.policy.exitOnStopPrice
-                print bar.close
+
+                # 记录log
+                log = "\n{0} Short : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                      " ma10:{0}; ma11:{1}; ma20:{2}; ma21:{3}; ma30:{4};ma31:{5}\n".format(self.ma10, self.ma11,
+                                                                                            self.ma20, self.ma21,
+                                                                                            self.ma30, self.ma31) + \
+                      "ma1_ma5:{0}; ma3_ma5:{1}\n".format(ma1_ma5, ma3_ma5) + \
+                      "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice)
+                self.writeCtaLog(log)
+                # print bar.datetime
+                # print "In short"
+                # print self.policy.exitOnStopPrice
+                # print bar.close
 
         else:
             # policy 跟随止损
@@ -196,6 +213,12 @@ class TripleMAStrategy04(CtaTemplate):
                     self.longStop = self.intraTradeHigh - self.atrValue * self.policy.exitOnLastRtnPips
                     if bar.close < self.longStop:
                         self.sell(bar.close, abs(self.pos), True)
+
+                        # 记录log
+                        log = "\n{0} Sell(Trailing Stop) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                            "intraTradeHigh:{0}; atrValue:{1}; dev: {2}\n".format(self.intraTradeHigh,self.atrValue,self.policy.exitOnLastRtnPips)+\
+                              "LongStop:{0}\n".format(self.longStop)
+                        self.writeCtaLog(log)
                         self.putEvent()
                         return
                 # 持有空头仓位
@@ -205,6 +228,12 @@ class TripleMAStrategy04(CtaTemplate):
                     self.shortStop = self.intraTradeLow + self.atrValue * self.policy.exitOnLastRtnPips
                     if bar.close > self.shortStop:
                         self.cover(bar.close, abs(self.pos), True)
+                        # 记录log
+                        log = "\n{0} Cover(Trailing Stop) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                              "intraTradeLow:{0}; atrValue:{1}; dev: {2}\n".format(self.intraTradeLow, self.atrValue,
+                                                                                    self.policy.exitOnLastRtnPips) + \
+                              "LongStop:{0}\n".format(self.longStop)
+                        self.writeCtaLog(log)
                         self.putEvent()
                         return
 
@@ -212,20 +241,30 @@ class TripleMAStrategy04(CtaTemplate):
             if self.policy.exitOnStopPrice > 0:
                     # 持有多头仓位
                 if self.pos > 0 and bar.close < self.policy.exitOnStopPrice:
-                    print bar.datetime
-                    print "In sell"
-                    print self.policy.exitOnStopPrice
-                    print bar.close
+                    # 记录log
+                    log = "\n{0} Sell(StopLoss) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                          "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice)
+                    self.writeCtaLog(log)
+                    # print bar.datetime
+                    # print "In sell"
+                    # print self.policy.exitOnStopPrice
+                    # print bar.close
                     self.sell(bar.close, abs(self.pos), True)
                     self.putEvent()
                     return
                     # 持有空头仓位
                 if self.pos < 0 and bar.close > self.policy.exitOnStopPrice:
+                    # 记录log
+                    log = "\n{0} Cover(StopLoss) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                          "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice)
+                    self.writeCtaLog(log)
+
                     self.cover(bar.close, abs(self.pos), True)
-                    print bar.datetime
-                    print "In cover"
-                    print self.policy.exitOnStopPrice
-                    print bar.close
+
+                    # print bar.datetime
+                    # print "In cover"
+                    # print self.policy.exitOnStopPrice
+                    # print bar.close
                     self.putEvent()
                     return
         # 发出状态更新事件
@@ -235,17 +274,32 @@ class TripleMAStrategy04(CtaTemplate):
 
     def onOrder(self, order):
         """收到委托变化推送（必须由用户继承实现）"""
-        pass
+        print "[onOrder]"
+        print order.__dict__['orderID']
+        print order.__dict__['orderTime']
+        print order.__dict__['direction']
+        print order.__dict__['price']
+        print order.__dict__['status']
 
     # ----------------------------------------------------------------------
     def onTrade(self, trade):
+        print "[onTrade]"
+        print trade.__dict__['orderID']
+        print trade.__dict__['tradeID']
+        print trade.__dict__['tradeTime']
+        print trade.__dict__['price']
+
+        # self.writeCtaLog(trade.__str__)
         # 发出状态更新事件
         self.putEvent()
 
     # ----------------------------------------------------------------------
     def onStopOrder(self, so):
         """停止单推送"""
-        pass
+        print "[onStopOrder]"
+        print so.__dict__['status']
+        print so.__dict__['direction']
+        print so.__dict__['price']
 
 if __name__ == '__main__':
     from vnpy.trader.app.ctaStrategy.ctaBacktesting import BacktestingEngine, OptimizationSetting, MINUTE_DB_NAME
@@ -258,7 +312,7 @@ if __name__ == '__main__':
     engine.setBacktestingMode(engine.BAR_MODE)  # 设置引擎的回测模式为K线
     engine.setDatabase(dbName, symbol)  # 设置使用的历史数据库
     engine.setStartDate('20170101')  # 设置回测用的数据起始日期
-    # engine.setEndDate('20170131')
+    engine.setEndDate('20170331')
     # 配置回测引擎参数
     engine.setSlippage(0)  # 设置滑点为股指1跳
     engine.setRate(0.3 / 10000)  # 设置手续费万0.3
@@ -277,4 +331,20 @@ if __name__ == '__main__':
     # 运行回测
     engine.runBacktesting()  # 运行回测
     # engine.showBacktestingResult()
-    engine.showDailyResult()
+    d = engine.calculateBacktestingResult()
+
+    import logging
+    logger = logging.getLogger("backtest")
+    fh = logging.FileHandler('./backtest.log')
+    logger.setLevel(logging.INFO)
+    logger.addHandler(fh)
+
+    for log in engine.logList:
+        logger.info(log)
+
+    result = d['resultList']
+    for trade in result:
+        dic = trade.__dict__
+        logger.info("entryDate: {0}; entryPrice: {1}".format(dic['entryDt'], dic['entryPrice']))
+        logger.info("exitDate: {0}; exitPrice: {1}".format(dic['exitDt'], dic['exitPrice']))
+        logger.info("pnl:{0}".format(dic['pnl']))

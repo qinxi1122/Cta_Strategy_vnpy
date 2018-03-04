@@ -1,0 +1,904 @@
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415
+None TripleMAStrategy:TripleMAStrategy策略初始化
+None TripleMAStrategy:TripleMAStrategy策略启动
+2017-02-10 13:55:00 TripleMAStrategy:
+2017-02-10 11:28:00 Buy : bar.close: 3316.0;
+ ma10:3241.8; ma11:3249.0; ma20:3242.4; ma21:3246.6; ma30:3219.16666667;ma31:3219.83333333
+ma1_ma5:3243.36; ma3_ma5:3219.215
+exitOnStopPrice:3271.5198217
+
+2017-02-10 14:55:00 TripleMAStrategy:
+2017-02-10 14:28:00 Sell(Trailing Stop) : bar.close: 3329.0;
+intraTradeHigh:3398.0; atrValue:33.1287725974; dev: 2
+LongStop:3331.74245481
+
+2017-02-15 14:55:00 TripleMAStrategy:
+2017-02-15 14:28:00 Buy : bar.close: 3405.0;
+ ma10:3417.4; ma11:3418.7; ma20:3419.2; ma21:3417.65; ma30:3271.16666667;ma31:3272.04166667
+ma1_ma5:3416.64; ma3_ma5:3269.87666667
+exitOnStopPrice:3356.6285954
+
+2017-02-16 14:27:00 TripleMAStrategy:
+2017-02-16 13:56:00 Sell(Trailing Stop) : bar.close: 3401.0;
+intraTradeHigh:3509.0; atrValue:35.0309966138; dev: 2
+LongStop:3438.93800677
+
+2017-02-16 21:27:00 TripleMAStrategy:
+2017-02-16 14:56:00 Buy : bar.close: 3432.0;
+ ma10:3415.4; ma11:3419.8; ma20:3417.15; ma21:3417.85; ma30:3283.55;ma31:3284.65
+ma1_ma5:3413.96; ma3_ma5:3282.60666667
+exitOnStopPrice:3377.64002439
+
+2017-02-21 22:27:00 TripleMAStrategy:
+2017-02-21 21:56:00 Sell(Trailing Stop) : bar.close: 3558.0;
+intraTradeHigh:3630.0; atrValue:30.5712147793; dev: 2
+LongStop:3568.85757044
+
+2017-02-27 09:27:00 TripleMAStrategy:
+2017-02-24 22:56:00 Buy : bar.close: 3588.0;
+ ma10:3463.2; ma11:3480.6; ma20:3476.25; ma21:3478.2; ma30:3465.5;ma31:3468.225
+ma1_ma5:3459.64; ma3_ma5:3463.54833333
+exitOnStopPrice:3537.19756215
+
+2017-02-28 10:55:00 TripleMAStrategy:
+2017-02-28 09:56:00 Sell(Trailing Stop) : bar.close: 3566.0;
+intraTradeHigh:3648.0; atrValue:33.1467968987; dev: 2
+LongStop:3581.7064062
+
+2017-03-01 22:27:00 TripleMAStrategy:
+2017-03-01 21:56:00 Buy : bar.close: 3547.0;
+ ma10:3526.8; ma11:3533.2; ma20:3536.15; ma21:3532.6; ma30:3510.21666667;ma31:3511.21666667
+ma1_ma5:3522.14; ma3_ma5:3508.97833333
+exitOnStopPrice:3498.24740485
+
+2017-03-02 21:27:00 TripleMAStrategy:
+2017-03-02 14:56:00 Sell(Trailing Stop) : bar.close: 3498.0;
+intraTradeHigh:3597.0; atrValue:32.5494543995; dev: 2
+LongStop:3531.9010912
+
+2017-03-06 21:27:00 TripleMAStrategy:
+2017-03-06 14:56:00 Short : bar.close: 3475.0;
+ ma10:3507.7; ma11:3502.0; ma20:3504.25; ma21:3503.4; ma30:3532.71666667;ma31:3532.59166667
+ma1_ma5:3515.2; ma3_ma5:3532.84166667
+exitOnStopPrice:3522.93046528
+
+2017-03-09 21:27:00 TripleMAStrategy:
+2017-03-09 14:56:00 Cover(Trailing Stop) : bar.close: 3408.0;
+intraTradeLow:3348.0; atrValue:29.8087905959; dev: 2
+LongStop:3531.9010912
+
+2017-03-20 11:27:00 TripleMAStrategy:
+2017-03-20 10:56:00 Buy : bar.close: 3626.0;
+ ma10:3592.9; ma11:3599.2; ma20:3596.45; ma21:3597.05; ma30:3518.4;ma31:3519.39166667
+ma1_ma5:3590.66; ma3_ma5:3517.12
+exitOnStopPrice:3586.02808777
+
+2017-03-20 14:27:00 TripleMAStrategy:
+2017-03-20 13:56:00 Sell(StopLoss) : bar.close: 3581.0;
+exitOnStopPrice:3586.02808777
+
+2017-03-24 21:27:00 TripleMAStrategy:
+2017-03-24 14:56:00 Short : bar.close: 3120.0;
+ ma10:3157.9; ma11:3152.5; ma20:3155.2; ma21:3154.55; ma30:3470.925;ma31:3468.59166667
+ma1_ma5:3156.2; ma3_ma5:3472.955
+exitOnStopPrice:3166.17824752
+
+2017-03-27 21:27:00 TripleMAStrategy:
+2017-03-27 14:56:00 Cover(Trailing Stop) : bar.close: 3075.0;
+intraTradeLow:3003.0; atrValue:31.1326830753; dev: 2
+LongStop:3579.06431552
+
+entryDate: 2017-02-10 13:56:00; entryPrice: 3316.0
+exitDate: 2017-02-10 14:56:00; exitPrice: 3329.0
+pnl:128.0065
+entryDate: 2017-02-15 14:56:00; entryPrice: 3405.0
+exitDate: 2017-02-16 14:28:00; exitPrice: 3401.0
+pnl:-42.0418
+entryDate: 2017-02-16 21:28:00; entryPrice: 3432.0
+exitDate: 2017-02-21 22:28:00; exitPrice: 3558.0
+pnl:1257.903
+entryDate: 2017-02-27 09:28:00; entryPrice: 3588.0
+exitDate: 2017-02-28 10:56:00; exitPrice: 3565.0
+pnl:-232.1459
+entryDate: 2017-03-01 22:28:00; entryPrice: 3548.0
+exitDate: 2017-03-02 21:28:00; exitPrice: 3498.0
+pnl:-502.1138
+entryDate: 2017-03-06 21:28:00; entryPrice: 3475.0
+exitDate: 2017-03-09 21:28:00; exitPrice: 3409.0
+pnl:657.9348
+entryDate: 2017-03-20 11:28:00; entryPrice: 3627.0
+exitDate: 2017-03-20 14:28:00; exitPrice: 3580.0
+pnl:-472.1621
+entryDate: 2017-03-24 21:28:00; entryPrice: 3120.0
+exitDate: 2017-03-27 21:28:00; exitPrice: 3075.0
+pnl:448.1415

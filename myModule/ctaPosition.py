@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-from vtConstant import *
-from ctaBase import *
+from vnpy.trader.vtConstant import  *
+from vnpy.trader.app.ctaStrategy.ctaBase import *
 import talib as ta
 
 from datetime import datetime

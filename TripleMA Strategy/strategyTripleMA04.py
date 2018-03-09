@@ -17,43 +17,47 @@ from __future__ import division
 from vnpy.trader.app.ctaStrategy.ctaTemplate import CtaTemplate, BarGenerator, ArrayManager
 from datetime import datetime
 import sys
-sys.path.append("../")
-from myModule.ctaPolicy import CtaPolicy
-from myModule.ctaPosition import CtaPosition
 
 ########################################################################
 class TripleMAStrategy04(CtaTemplate):
     """基于三均线的交易策略"""
-    className = 'TripleMAStrategy'
+    className = 'TripleMAStrategy04'
     author = 'Y.Raul'
 
     # 策略参数
-    # 三均线长度设置
-    maWindow1 = 10
-    maWindow2 = 20
-    maWindow3 = 120
-    maWindow4 = 5
-    slMultiplier = 2  # 计算止损距离的乘数
-    atrWindow = 30  # ATR窗口数
-    initDays = 1  # 初始化数据所用的天数
-    fixedSize = 1  # 每次交易的数量
-    maxSize = 4
-
+    initDays = 10  # 初始化数据所用的天数
+    addPos = True  # 加仓开关
+    windowCheck = True #交易窗口开关
     openWindowSize = 5 #开盘观察窗口，单位分钟
     closeWindowSize = 10 #收盘平仓窗口，单位分钟
     minDiff = 1 #最小变动单位
 
     # 策略变量
-    atrValue = 0  # ATR指标数值
-    stoploss = 1.5
-    stopRatio = 3
-    addRatio = 5
-
+    # 仓位设置
+    stepPos = 1  # 每次交易的数量
+    maxPos = 4  # 仓位上限
+    addPosRatio = 3
+    # 均线设置
+    maWindow1 = 10
+    maWindow2 = 20
+    maWindow3 = 120
+    maWindow4 = 5
+    atrWindow = 30  # ATR窗口数
+    
+    # 出场设置
+    exitOnTrailingStop = 2  # Trailing Stop 距离
+    exitOnLossStop = 3 # Loss Stop 距离
+    
+    # 价格相关变量
     intraTradeHigh = 0  # 持仓期内的最高点
     intraTradeLow = 0  # 持仓期内的最低点
     longStop = 0  # 多头止损
     shortStop = 0  # 空头止损
-
+    longEntry = 0  # 多头开仓
+    shortEntry = 0
+    avgEntryPrice = 0
+    
+    # 指标相关变量
     # ma次新值
     ma10 = 0
     ma20 = 0
@@ -62,11 +66,7 @@ class TripleMAStrategy04(CtaTemplate):
     ma11 = 0
     ma21 = 0
     ma31 = 0
-
-    longEntry = 0  # 多头开仓
-    longExit = 0  # 多头平仓
-    shortEntry = 0
-    shortExit = 0
+    atrValue = 0  # ATR指标数值
 
     orderList = []  # 保存委托代码的列表
 
@@ -80,8 +80,12 @@ class TripleMAStrategy04(CtaTemplate):
                  'maWindow3',
                  'maWindow4'
                  'initDays',
-                 'fixedSize',
-                 'maxSize']
+                 'addPos',
+                 'stepPos',
+                 'maxPos',
+                 'exitOnTrailingStop',
+                 'exitOnLossStop',
+                 ]
 
     # 变量列表，保存了变量的名称
     varList = ['inited',
@@ -90,7 +94,11 @@ class TripleMAStrategy04(CtaTemplate):
                'ma10',
                'ma11',
                'ma20',
-               'ma21']
+               'ma21',
+               'ma30',
+               'ma31',
+               'atrValue',
+               'avgPrice']
     # 同步列表
     syncList = ['pos']
 
@@ -98,33 +106,17 @@ class TripleMAStrategy04(CtaTemplate):
     def __init__(self, ctaEngine, setting):
         """Constructor"""
         super(TripleMAStrategy04, self).__init__(ctaEngine, setting)
-
+        self.EntryPriceList = []
         self.bm = BarGenerator(self.onBar, 5, self.onFiveBar)
-
-        # 由于maWindow3的长度是120，所以ArrayManager的size要增加至150
-        self.am = ArrayManager(size=150)
-
-        # 创建CtaPolicy策略规则实体
-        self.policy = CtaPolicy()
-        self.policy.exitOnLastRtnPips = self.slMultiplier
-        self.policy.addPosOnPips = 0 #加仓间隔
-        self.policy.addPos = True #加仓开关
-
-        # 创建仓位管理模块
-        self.position = CtaPosition(self)
-        self.position.maxPos = self.maxSize #最大仓位
-        #
-
+        self.am = ArrayManager(size= self.maWindow3 + 30)
     # ----------------------------------------------------------------------
     def onInit(self):
         """初始化策略（必须由用户继承实现）"""
         self.writeCtaLog(u'%s策略初始化' % self.name)
-
         # 载入历史数据，并采用回放计算的方式初始化策略数值
         initData = self.loadBar(self.initDays)
         for bar in initData:
             self.onBar(bar)
-
         self.putEvent()
 
     # ----------------------------------------------------------------------
@@ -142,6 +134,13 @@ class TripleMAStrategy04(CtaTemplate):
     # ----------------------------------------------------------------------
     def onTick(self, tick):
         """收到行情TICK推送（必须由用户继承实现）"""
+        self.curDateTime = tick.datetime
+        # 计算交易时间和平仓时间
+        if self.windowCheck == True:
+            self.__timeWindow(tick.datetime)
+        else:
+            self.tradeWindow = True
+
         self.bm.updateTick(tick)
 
     # ----------------------------------------------------------------------
@@ -150,9 +149,12 @@ class TripleMAStrategy04(CtaTemplate):
         # 更新策略执行的时间（用于回测时记录发生的时间）
         # 回测数据传送的bar.datetime，为bar的结束时间
         self.curDateTime = bar.datetime
-
         # 计算交易时间和平仓时间
-        self.__timeWindow(bar.datetime)
+        if self.windowCheck == True:
+            self.__timeWindow(bar.datetime)
+        else:
+            self.tradeWindow = True
+
         self.bm.updateBar(bar)
 
     # ----------------------------------------------------------------------
@@ -162,7 +164,8 @@ class TripleMAStrategy04(CtaTemplate):
         self.am.updateBar(bar)
         if not self.am.inited:
             return
-        print bar.datetime
+        # print bar.datetime
+
         # 撤销之前发出的尚未成交的委托（包括限价单和停止单）
         self.cancelAll()
 
@@ -186,151 +189,167 @@ class TripleMAStrategy04(CtaTemplate):
 
         # 判断是否要进行交易
         # 当前无仓位，发送OCO开仓委托
-        if self.pos == 0 and self.tradeWindow:
+        if self.pos == 0 :
             self.intraTradeHigh = bar.high
             self.intraTradeLow = bar.low
+            if self.tradeWindow:
+                # 开多, bar.close > MA120,MA10 > MA120,MA10 上穿MA20，MA10、MA120向上
+                if bar.close > self.ma31 and self.ma11 > self.ma31 \
+                        and self.ma10 < self.ma20 and self.ma11 > self.ma21\
+                        and self.ma31 > ma3_ma5 and self.ma11 > ma1_ma5:
 
-            # 开多, bar.close > MA120,MA10 > MA120,MA10 上穿MA20，MA10、MA120向上
-            if bar.close > self.ma31 and self.ma11 > self.ma31 \
-                    and self.ma10 < self.ma20 and self.ma11 > self.ma21\
-                    and self.ma31 > ma3_ma5 and self.ma11 > ma1_ma5:
+                    self.longEntry = bar.close
+                    self.buy(self.longEntry, self.stepPos, True)
 
-                self.longEntry = bar.close
-                self.buy(self.longEntry, self.fixedSize, True)
+                    # lastEntryPrice = self.longEntry
+                    self.LossStopPrice = round(self.longEntry * (100.0 -self.exitOnLossStop)/100)
+                    self.EntryPriceList.append(self.longEntry)
 
-                self.policy.entryPrice = self.longEntry
-                self.policy.exitOnStopPrice = round(self.policy.entryPrice * (100.0 -self.stopRatio)/100)
-                self.position.posList.append(self.policy.entryPrice)
-                # 记录log
-                log = "\n Trading: {0}\n".format(self.trading)+\
-                    "{0} Buy : bar.close: {1};\n".format(bar.datetime, bar.close) + \
-                      " ma10:{0}; ma11:{1}; ma20:{2}; ma21:{3}; ma30:{4};ma31:{5}\n".format(self.ma10,self.ma11,self.ma20,self.ma21,self.ma30,self.ma31) + \
-                    "ma1_ma5:{0}; ma3_ma5:{1}\n".format(ma1_ma5,ma3_ma5)+\
-                    "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice)
-                self.writeCtaLog(log)
+                    # 记录log
+                    log = "\n Trading: {0}\n".format(self.trading)+\
+                        "{0} Buy : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                          " ma10:{0}; ma11:{1}; ma20:{2}; ma21:{3}; ma30:{4};ma31:{5}\n".format(self.ma10,self.ma11,self.ma20,self.ma21,self.ma30,self.ma31) + \
+                        "ma1_ma5:{0}; ma3_ma5:{1}\n".format(ma1_ma5,ma3_ma5)+\
+                        "LossStopPrice:{0}\n".format(self.LossStopPrice)
+                    self.writeCtaLog(log)
 
-            # 开空, bar.close < MA120,MA10 < MA120,MA10 下穿MA20, MA10,MA120向下
-            elif bar.close < self.ma31 and self.ma11 < self.ma31 \
-                    and self.ma10 > self.ma20 and self.ma11 < self.ma21\
-                    and self.ma31 < ma3_ma5 and self.ma11 < ma1_ma5:
-                self.shortEntry = bar.close
+                # 开空, bar.close < MA120,MA10 < MA120,MA10 下穿MA20, MA10,MA120向下
+                elif bar.close < self.ma31 and self.ma11 < self.ma31 \
+                        and self.ma10 > self.ma20 and self.ma11 < self.ma21\
+                        and self.ma31 < ma3_ma5 and self.ma11 < ma1_ma5:
 
-                self.short(self.shortEntry, self.fixedSize, True)
+                    self.shortEntry = bar.close
+                    self.short(self.shortEntry, self.stepPos, True)
+                    # lastEntryPrice = self.shortEntry
+                    self.LossStopPrice = round(self.shortEntry * (100.0  + self.exitOnLossStop)/100)
+                    self.EntryPriceList.append(self.shortEntry)
 
-
-                self.policy.entryPrice = self.shortEntry
-                self.policy.exitOnStopPrice = round(self.policy.entryPrice * (100.0  + self.stopRatio)/100)
-                self.position.posList.append(self.policy.entryPrice)
-                # 记录log
-                log = "\n Trading: {0}\n".format(self.trading)+\
-                    "{0} Short : bar.close: {1};\n".format(bar.datetime, bar.close) + \
-                      " ma10:{0}; ma11:{1}; ma20:{2}; ma21:{3}; ma30:{4};ma31:{5}\n".format(self.ma10, self.ma11,
-                                                                                            self.ma20, self.ma21,
-                                                                                            self.ma30, self.ma31) + \
-                      "ma1_ma5:{0}; ma3_ma5:{1}\n".format(ma1_ma5, ma3_ma5) + \
-                      "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice)
-                self.writeCtaLog(log)
-
+                    # 记录log
+                    log = "\n Trading: {0}\n".format(self.trading)+\
+                        "{0} Short : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                          " ma10:{0}; ma11:{1}; ma20:{2}; ma21:{3}; ma30:{4};ma31:{5}\n".format(self.ma10, self.ma11,
+                                                                                                self.ma20, self.ma21,
+                                                                                                self.ma30, self.ma31) + \
+                          "ma1_ma5:{0}; ma3_ma5:{1}\n".format(ma1_ma5, ma3_ma5) + \
+                          "LossStopPrice:{0}\n".format(self.LossStopPrice)
+                    self.writeCtaLog(log)
+            # return
         else:
-            # policy 跟随止损
-            if self.policy.exitOnLastRtnPips:
-                # 持有多头仓位
-                if self.pos > 0 and self.tradeWindow:
-                    self.intraTradeHigh = max(self.intraTradeHigh, bar.high)
-                    self.intraTradeLow = bar.low
-                    self.longStop = round(self.intraTradeHigh - self.atrValue * self.policy.exitOnLastRtnPips)
-                    if bar.close < self.longStop:
-                        self.sell(bar.close, abs(self.pos), True)
-
-                        # 记录log
-                        log = "\n{0} Sell(Trailing Stop) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
-                            "intraTradeHigh:{0}; atrValue:{1}; dev: {2}\n".format(self.intraTradeHigh,self.atrValue,self.policy.exitOnLastRtnPips)+\
-                              "LongStop:{0}\n".format(self.longStop)
-                        self.writeCtaLog(log)
-                        self.putEvent()
-
-                        self.position.posList = []
-                        return
-                # 持有空头仓位
-                if self.pos < 0 and self.tradeWindow:
-                    self.intraTradeHigh = bar.high
-                    self.intraTradeLow = min(self.intraTradeLow, bar.low)
-                    self.shortStop = round(self.intraTradeLow + self.atrValue * self.policy.exitOnLastRtnPips)
-                    if bar.close > self.shortStop:
-                        self.cover(bar.close, abs(self.pos), True)
-                        # 记录log
-                        log = "\n{0} Cover(Trailing Stop) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
-                              "intraTradeLow:{0}; atrValue:{1}; dev: {2}\n".format(self.intraTradeLow, self.atrValue,
-                                                                                    self.policy.exitOnLastRtnPips) + \
-                              "LongStop:{0}\n".format(self.longStop)
-                        self.writeCtaLog(log)
-                        self.putEvent()
-                        self.position.posList = []
-                        return
-
-            # policy 固定止损
-            if self.policy.exitOnStopPrice > 0:
+            if self.tradeWindow:
+                # Trailing Stop 跟随止损
+                if self.exitOnTrailingStop:
                     # 持有多头仓位
-                if self.pos > 0 and bar.close < self.policy.exitOnStopPrice:
-                    # 记录log
-                    log = "\n{0} Sell(Stop Loss) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
-                          "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice) + \
-                        "Ratio:{0}%\n".format((1 - bar.close/self.policy.exitOnStopPrice)*100)
-                    self.writeCtaLog(log)
-                    self.sell(bar.close, abs(self.pos), True)
-                    self.putEvent()
+                    if self.pos > 0 and self.tradeWindow:
 
-                    self.position.posList = []
-                    return
+                        self.intraTradeHigh = max(self.intraTradeHigh, bar.high)
+                        self.intraTradeLow = bar.low
+                        self.longStop = round(self.intraTradeHigh - self.atrValue * self.exitOnTrailingStop)
+
+                        if bar.close < self.longStop:
+                            self.sell(bar.close, abs(self.pos), True)
+
+                            # 记录log
+                            log = "\n{0} Sell(Trailing Stop) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                                "intraTradeHigh:{0}; atrValue:{1}; dev: {2}\n".format(self.intraTradeHigh,self.atrValue,self.exitOnTrailingStop)+\
+                                  "LongStop:{0}\n".format(self.longStop)
+                            self.writeCtaLog(log)
+                            self.putEvent()
+
+                            self.EntryPriceList = []
+                            return
                     # 持有空头仓位
-                if self.pos < 0 and bar.close > self.policy.exitOnStopPrice:
-                    # 记录log
-                    log = "\n{0} Cover(Stop Loss) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
-                          "exitOnStopPrice:{0}\n".format(self.policy.exitOnStopPrice) +\
-                    "Ratio:{0}%\n".format((1 - bar.close / self.policy.exitOnStopPrice) * 100)
-                    self.writeCtaLog(log)
+                    if self.pos < 0 and self.tradeWindow:
 
-                    self.cover(bar.close, abs(self.pos), True)
-                    self.putEvent()
+                        self.intraTradeHigh = bar.high
+                        self.intraTradeLow = min(self.intraTradeLow, bar.low)
+                        self.shortStop = round(self.intraTradeLow + self.atrValue * self.exitOnTrailingStop)
 
-                    self.position.posList = []
-                    return
+                        if bar.close > self.shortStop:
+                            self.cover(bar.close, abs(self.pos), True)
+                            # 记录log
+                            log = "\n{0} Cover(Trailing Stop) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                                  "intraTradeLow:{0}; atrValue:{1}; dev: {2}\n".format(self.intraTradeLow, self.atrValue,
+                                                                                        self.exitOnTrailingStop) + \
+                                  "LongStop:{0}\n".format(self.longStop)
+                            self.writeCtaLog(log)
+                            self.putEvent()
 
-            # 海龟加仓
-            if self.policy.addPos and (self.maxSize - abs(self.pos) > 0):
-                # 加仓策略使用特定pip间隔（例如海龟的N）
-                # 根据 ATR更新N
-                # self.policy.addPosOnPips = int(self.atrValue /(2* self.minDiff))
-                # 固定百分比加仓
-                self.policy.addPosOnPips = round(self.policy.entryPrice * self.addRatio/100)
-                self.writeCtaLog(u'\n 加仓判断:{0}，当前仓位:{1}'.format(bar.datetime, self.pos))
-                # 加多仓
-                if self.pos > 0 \
-                        and bar.close >= self.policy.entryPrice +  self.policy.addPosOnPips * self.minDiff:
-                    self.writeCtaLog(u'\n {0},加仓多单{1}手,价格:{2}'.format(bar.datetime, self.fixedSize, bar.close))
-                    self.buy(bar.close, self.fixedSize, True)
-                    # 更新开仓价格
-                    self.policy.entryPrice = bar.close
-                    self.position.posList.append(self.policy.entryPrice)
-                    self.avgPrice = sum(self.position.posList)/len(self.position.posList)
-                    # 更新固定止损价
-                    self.policy.exitOnStopPrice = round( self.avgPrice* (100.0 - self.stopRatio) / 100)
-                    self.writeCtaLog(u'\n 更新止损价:{0}，最新仓位:{1}'.format(self.policy.exitOnStopPrice,self.pos))
+                            self.EntryPriceList = []
+                            return
 
-                    return
-                # 加空仓
-                if self.pos < 0 \
-                        and bar.close <= (self.policy.entryPrice + self.policy.addPosOnPips*self.minDiff):
-                    self.writeCtaLog(u'{0},加仓空单{1}手,价格:{2}'.format(bar.datetime, self.fixedSize, bar.close))
-                    self.short(bar.close, self.fixedSize, True)
-                    # 更新开仓价格
-                    self.policy.entryPrice = bar.close
-                    self.position.posList.append(self.policy.entryPrice)
-                    self.avgPrice = (sum(self.position.posList)) / len(self.position.posList)
-                    # 更新固定止损价
-                    self.policy.exitOnStopPrice = round(self.avgPrice * (100.0 + self.stopRatio) / 100)
-                    self.writeCtaLog(u'\n 更新止损价:{0}，最新仓位:{1}'.format(self.policy.exitOnStopPrice, self.pos))
-                    return
+                # Loss Stop 固定止损
+                if self.exitOnLossStop:
+                        # 持有多头仓位
+                    if self.pos > 0 and bar.close < self.LossStopPrice:
+                        # 记录log
+                        log = "\n{0} Sell(Stop Loss) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                              "LossStopPrice:{0}\n".format(self.LossStopPrice) + \
+                            "Ratio:{0}%\n".format((1 - bar.close/self.LossStopPrice)*100)
+                        self.writeCtaLog(log)
+
+                        self.sell(bar.close, abs(self.pos), True)
+                        self.putEvent()
+
+                        self.EntryPriceList = []
+                        return
+                        # 持有空头仓位
+                    if self.pos < 0 and bar.close > self.LossStopPrice:
+                        # 记录log
+                        log = "\n{0} Cover(Stop Loss) : bar.close: {1};\n".format(bar.datetime, bar.close) + \
+                              "LossStopPrice:{0}\n".format(self.LossStopPrice) +\
+                        "Ratio:{0}%\n".format((1 - bar.close / self.LossStopPrice) * 100)
+                        self.writeCtaLog(log)
+
+                        self.cover(bar.close, abs(self.pos), True)
+                        self.putEvent()
+
+                        self.EntryPriceList = []
+                        return
+
+                # 加仓
+                if self.addPos and (self.maxPos - abs(self.pos) > 0):
+                    print self.pos, (self.maxPos - abs(self.pos) )
+                    print self.EntryPriceList
+
+                    lastEntryPrice = self.EntryPriceList[-1]
+                    # 固定百分比加仓
+                    addPosOnPips= round(lastEntryPrice* self.addPosRatio/100)
+
+                    self.writeCtaLog(u'\n 加仓判断:{0}，当前仓位:{1}'.format(bar.datetime, self.pos))
+                    # 加多仓
+                    if self.pos > 0 \
+                            and bar.close >= lastEntryPrice + addPosOnPips* self.minDiff:
+                        # 记录log
+                        self.writeCtaLog(u'\n {0},加仓多单{1}手,价格:{2}'.format(bar.datetime, self.stepPos, bar.close))
+                        self.buy(bar.close, self.stepPos, True)
+
+                        # 更新开仓价格
+                        lastEntryPrice = bar.close
+                        self.EntryPriceList.append(lastEntryPrice)
+                        self.avgEntryPrice = sum(self.EntryPriceList)/len(self.EntryPriceList)
+
+                        # 更新固定止损价
+                        self.LossStopPrice = round( self.avgEntryPrice* (100.0 - self.exitOnLossStop) / 100)
+                        self.writeCtaLog(u'\n 更新固定止损价:{0}，最新仓位:{1}'.format(self.LossStopPrice,self.pos))
+
+                        return
+
+                    # 加空仓
+                    if self.pos < 0 \
+                            and bar.close <= (lastEntryPrice + addPosOnPips*self.minDiff):
+
+                        self.writeCtaLog(u'{0},加仓空单{1}手,价格:{2}'.format(bar.datetime, self.stepPos, bar.close))
+                        self.short(bar.close, self.stepPos, True)
+
+                        # 更新开仓价格
+                        lastEntryPrice = bar.close
+                        self.EntryPriceList.append(lastEntryPrice)
+                        self.avgEntryPrice = (sum(self.EntryPriceList)) / len(self.EntryPriceList)
+
+                        # 更新固定止损价
+                        self.LossStopPrice = round(self.avgEntryPrice * (100.0 + self.exitOnLossStop) / 100)
+                        self.writeCtaLog(u'\n 更新固定止损价:{0}，最新仓位:{1}'.format(self.LossStopPrice, self.pos))
+                        return
 
         # 执行收盘前平仓检查
         # self.__dailyCloseCheck(bar)
@@ -431,16 +450,16 @@ class TripleMAStrategy04(CtaTemplate):
         self.cancelAll()
         log = u'{0},收盘前{1}分钟，撤单及平仓'.format(bar.datetime,self.closeWindowSize)
         self.writeCtaLog(log)
-        self.avgPrice = (sum(self.position.posList)) / len(self.position.posList)
+        self.avgEntryPrice = (sum(self.EntryPriceList)) / len(self.EntryPriceList)
         # 记录log
         log = "\n{0} __dailyCloseCheck : bar.close: {1};\n".format(bar.datetime, bar.close) + \
-              "avgPrice:{0}\n".format(self.avgPrice)+\
+              "avgPrice:{0}\n".format(self.avgEntryPrice)+\
             "pos:{0}\n".format(self.pos)
 
         self.writeCtaLog(log)
 
         # 强制平仓
-        if self.pos > 0 and bar.close < self.avgPrice:
+        if self.pos > 0 and bar.close < self.avgEntryPrice:
             self.writeCtaLog(u'强制日内平亏损多仓')
 
             # 降低两个滑点
@@ -452,7 +471,7 @@ class TripleMAStrategy04(CtaTemplate):
 
             return True
 
-        if self.pos < 0 and bar.close > self.avgPrice:
+        if self.pos < 0 and bar.close > self.avgEntryPrice:
             self.writeCtaLog(u'强制日内平亏损空仓')
 
             self.cover(bar.close+2*self.minDiff, abs(self.pos),True )
@@ -487,7 +506,12 @@ if __name__ == '__main__':
     from strategyTripleMA04 import TripleMAStrategy04
 
     #  使用策略类中的默认参数，则参数配置字典留空
-    d = {}
+    d = {'initDays':10,\
+         'addPos':True,\
+         'windowCheck':True,\
+         'exitOnLossStop': 5,\
+         'exitOnTrailingStop': 1
+    }
     # 初始化策略
     engine.initStrategy(TripleMAStrategy04, d)
     # 运行回测

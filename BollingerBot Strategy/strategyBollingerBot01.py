@@ -29,7 +29,8 @@ class BollingerBotStrategy01(CtaTemplate):
 
     # 策略参数
     bollWindow = 28         # 通道窗口数
-    entryDev = 3.2          # 开仓偏差
+    entryDevUp = 4          # 开仓偏差
+    entryDevDown = 3.2
     # exitDev = 1.2           # 平仓偏差
     # trailingPrcnt = 0.4
     # 移动止损百分比
@@ -152,7 +153,8 @@ class BollingerBotStrategy01(CtaTemplate):
             return
 
 
-        self.datetime = bar.datetime
+        self.date = bar.date
+        self.time = bar.time
         # 检查交易信号
         if self.buySig:
             res = self.buy(bar.close, self.fixedSize, True)
@@ -181,8 +183,8 @@ class BollingerBotStrategy01(CtaTemplate):
             # return
 
         if self.shortSig:
-            res = self.short(bar.close, self.fixedSize, True)
-            self.orderList.extend([x.split('.')[1] for x in res])
+            self.res = self.short(bar.close, self.fixedSize, True)
+            self.orderList.extend([x.split('.')[1] for x in self.res])
             # self.orderList.extend(res.split('.')[1])
 
             # self.LossStopPrice = round(self.shortEntry * (100.0 + self.exitOnLossStop) / 100)
@@ -228,9 +230,9 @@ class BollingerBotStrategy01(CtaTemplate):
                   " price:{0}; stopExit: {1}\n".format(price,self.stopExit)
             self.writeCtaLog(log)
 
-            self.entryPriceList = []
-            self.avgEntryPrice = 0
-            self.stopExit = 0
+            # self.entryPriceList = []
+            # self.avgEntryPrice = 0
+            # self.stopExit = 0
             self.sellSig = False
             # return
 
@@ -254,9 +256,9 @@ class BollingerBotStrategy01(CtaTemplate):
                   " price:{0}; stopExit: {1}\n".format(price,self.stopExit)
             self.writeCtaLog(log)
 
-            self.entryPriceList = []
-            self.avgEntryPrice = 0
-            self.stopExit = 0
+            # self.entryPriceList = []
+            # self.avgEntryPrice = 0
+            # self.stopExit = 0
             self.coverSig = False
             # return
         self.putEvent()
@@ -278,8 +280,8 @@ class BollingerBotStrategy01(CtaTemplate):
         # 计算指标数值
         self.bollMid = self.am.sma(self.bollWindow,True)[-1 * (self.dispacedLen + 1)]
         self.bollStd = self.am.std(self.bollWindow)
-        self.entryUp = self.bollMid + self.bollStd * self.entryDev
-        self.entryDown = self.bollMid - self.bollStd * self.entryDev
+        self.entryUp = round(self.bollMid + self.bollStd * self.entryDevUp)
+        self.entryDown = round(self.bollMid - self.bollStd * self.entryDevDown)
         maArray = self.am.sma(self.maWindow, True)
         self.maFilter = round(maArray[-1])
         self.maFilter1 = round(maArray[-2])
@@ -455,23 +457,24 @@ class BollingerBotStrategy01(CtaTemplate):
               u"status {0}; vtOrderID: {1}\n".format(order.status, order.vtOrderID)
         self.writeCtaLog(log)
 
-        if order.vtOrderID in self.orderList:
-            if order.direction == DIRECTION_LONG:
-                if order.totalVolume == order.tradedVolume:
-                    # 更新入场价列表，更新平均入场价
-                    self.entryPriceList.append(order.price)
-                    self.avgEntryPrice = sum(self.entryPriceList) / len(self.entryPriceList)
-                    self.stopExit = self.avgEntryPrice - self.exitOnLossStop * self.minDiff  # 固定止损价
-                    self.orderList.remove(order.vtOrderID)
-
-            elif order.direction == DIRECTION_SHORT:
+        # 对于开仓，记录相关价格
+        # if order.vtOrderID in self.orderList:
+        if order.direction == DIRECTION_LONG and order.offset == OFFSET_OPEN:
+            if order.totalVolume == order.tradedVolume:
                 # 更新入场价列表，更新平均入场价
-                if order.totalVolume == order.tradedVolume:
-                    # 更新入场价列表，更新平均入场价
-                    self.entryPriceList.append(order.price)
-                    self.avgEntryPrice = sum(self.entryPriceList) / len(self.entryPriceList)
-                    self.stopExit = self.avgEntryPrice + self.exitOnLossStop * self.minDiff  # 固定止损价
-                    self.orderList.remove(order.vtOrderID)
+                self.entryPriceList.append(order.price)
+                self.avgEntryPrice = sum(self.entryPriceList) / len(self.entryPriceList)
+                self.stopExit = self.avgEntryPrice - self.exitOnLossStop * self.minDiff  # 固定止损价
+                    # self.orderList.remove(order.vtOrderID)
+
+        elif order.direction == DIRECTION_SHORT and order.offset == OFFSET_OPEN:
+            # 更新入场价列表，更新平均入场价
+            if order.totalVolume == order.tradedVolume:
+                # 更新入场价列表，更新平均入场价
+                self.entryPriceList.append(order.price)
+                self.avgEntryPrice = sum(self.entryPriceList) / len(self.entryPriceList)
+                self.stopExit = self.avgEntryPrice + self.exitOnLossStop * self.minDiff  # 固定止损价
+                # self.orderList.remove(order.vtOrderID)
 
         self.putEvent()
 
@@ -483,7 +486,8 @@ class BollingerBotStrategy01(CtaTemplate):
     #----------------------------------------------------------------------
     def onStopOrder(self, so):
         """停止单推送"""
-        pass
+        # print so.__dict__
+        self.putEvent()
 
 if __name__ == "__main__":
     from vnpy.trader.app.ctaStrategy.ctaBacktesting import BacktestingEngine, OptimizationSetting, MINUTE_DB_NAME
@@ -494,7 +498,7 @@ if __name__ == "__main__":
     # 设置回测使用的数据
     engine.setBacktestingMode(engine.BAR_MODE)  # 设置引擎的回测模式为K线
     engine.setDatabase(dbName, symbol)  # 设置使用的历史数据库
-    engine.setStartDate('20170501',10)  # 设置回测用的数据起始日期
+    engine.setStartDate('20130101',10)  # 设置回测用的数据起始日期
     engine.setEndDate('20171231')
     # 配置回测引擎参数
     engine.setSlippage(0)  # 设置滑点为股指1跳
@@ -507,16 +511,16 @@ if __name__ == "__main__":
     from strategyBollingerBot01 import BollingerBotStrategy01
 
     #  使用策略类中的默认参数，则参数配置字典留空
-    d = {
-    }
+    d = {}
     # 初始化策略
     engine.initStrategy(BollingerBotStrategy01, d)
     # 运行回测
     engine.runBacktesting()  # 运行回测
     # engine.showBacktestingResult()
-    engine.showDailyResult()
+    # engine.showDailyResult()
     d = engine.calculateBacktestingResult()
 
+    # 记录Log
     import logging
     logger = logging.getLogger("backtest")
     fh = logging.FileHandler('./{0}_backtest.log'.format(engine.strategy.className))
@@ -526,9 +530,31 @@ if __name__ == "__main__":
     for log in engine.logList:
         logger.info(log)
 
+    # logger2 = logging.getLogger("result")
+    # fh2 = logging.FileHandler('./{0}_result.log'.format(engine.strategy.className))
+    # logger2.setLevel(logging.INFO)
+    # logger2.addHandler(fh2)
+
     result = d['resultList']
+    entryDate = []
+    entryPrice = []
+    exitDate = []
+    exitPrice = []
+    volume = []
+    pnl = []
     for trade in result:
         dic = trade.__dict__
-        logger.info("entryDate: {0}; entryPrice: {1}".format(dic['entryDt'], dic['entryPrice']))
-        logger.info("exitDate: {0}; exitPrice: {1}".format(dic['exitDt'], dic['exitPrice']))
-        logger.info("pnl:{0}".format(dic['pnl']))
+        entryDate.append(dic['entryDt'])
+        entryPrice.append(dic['entryPrice'])
+        exitDate.append(dic['exitDt'])
+        exitPrice.append(dic['exitPrice'])
+        volume.append(dic['volume'])
+        pnl.append(dic['pnl'])
+        # logger2.info("entryDate: {0}; entryPrice: {1}".format(dic['entryDt'], dic['entryPrice']))
+        # logger2.info("exitDate: {0}; exitPrice: {1}".format(dic['exitDt'], dic['exitPrice']))
+        # logger2.info("volume:{0}".format(dic['volume']))
+        # logger2.info("pnl:{0}".format(dic['pnl']))
+    import pandas as pd
+    data = {'entryDate': entryDate, 'entryPrice': entryPrice, 'exitDate':exitDate, 'exitPrice':exitPrice, 'volume':volume, 'pnl':pnl}
+    df = pd.DataFrame(data)
+    df.to_csv('./{0}_result.csv'.format(engine.strategy.className), index=False)

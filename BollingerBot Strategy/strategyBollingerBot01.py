@@ -82,9 +82,12 @@ class BollingerBotStrategy01(CtaTemplate):
                  'author',
                  'vtSymbol',
                  'bollWindow',
-                 'entryDev',
-                 'exitDev',
-                 'trailingPrcnt',
+                 'entryDevUp',
+                 'entryDevDown',
+                 'trailingStart1',
+                 'trailingStart2',
+                 'exitOnTrailingStop1',
+                 'exitOnTrailingStop2',
                  'maWindow',
                  'initDays',
                  'fixedSize']    
@@ -93,13 +96,17 @@ class BollingerBotStrategy01(CtaTemplate):
     varList = ['inited',
                'trading',
                'pos',
-               'bollMid',
-               'bollStd',
+               'buySig',
+               'shortSig',
+               'sellSig',
+               'coverSig',
                'entryUp',
-               'exitUp',
+               'entryDown',
+               'trailingExit',
+               'stopExit',
                'intraTradeHigh',
-               'longEntry',
-               'longExit']
+               'intraTradeLow',
+               'avgEntryPrice']
     
     # 同步列表
     syncList = ['pos',

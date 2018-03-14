@@ -639,7 +639,7 @@ if __name__ == '__main__':
 
     import logging
     logger = logging.getLogger("backtest")
-    fh = logging.FileHandler('./backtest.log')
+    fh = logging.FileHandler('./{0}_backtest.log'.format(engine.strategy.className))
     logger.setLevel(logging.INFO)
     logger.addHandler(fh)
 

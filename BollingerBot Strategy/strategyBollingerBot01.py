@@ -488,12 +488,14 @@ class BollingerBotStrategy01(CtaTemplate):
     #----------------------------------------------------------------------
     def onTrade(self, trade):
         # 发出状态更新事件
+        data = trade.__dict__
+
         self.putEvent()
 
     #----------------------------------------------------------------------
     def onStopOrder(self, so):
         """停止单推送"""
-        # print so.__dict__
+        data = so.__dict__
         self.putEvent()
 
 if __name__ == "__main__":

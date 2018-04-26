@@ -1,0 +1,5 @@
+.idea
+*.json
+*.pyc
+*.log
+*.csv

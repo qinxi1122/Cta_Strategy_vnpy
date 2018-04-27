@@ -63,12 +63,12 @@ class CciSignal(CtaSignal):
         super(CciSignal, self).__init__()
         
         self.cciWindow = 10
-        self.cciLevel = 0
+        self.cciLevel = 20
         self.cciLong = self.cciLevel
         self.cciShort = -self.cciLevel
-        
+        self.cciValue = 0.0
         self.bg = BarGenerator(self.onBar, 15, self.on15Bar)
-        self.am = ArrayManager()        
+        self.am = ArrayManager()
         
     #----------------------------------------------------------------------
     def onTick(self, tick):
@@ -81,16 +81,25 @@ class CciSignal(CtaSignal):
         self.bg.updateBar(bar)
 
     def on15Bar(self, bar):
+
         self.am.updateBar(bar)
+        print bar.datetime
+        print "@cciSignal"
+        print "cci inited: ", self.am.inited
 
         if not self.am.inited:
             self.setSignalPos(0)
+            return
 
-        cciValue = self.am.cci(self.cciWindow)
 
-        if cciValue >= self.cciLong:
+        self.cciValue = self.am.cci(self.cciWindow)
+
+
+        print "cciValue: ", self.cciValue
+
+        if self.cciValue >= self.cciLong:
             self.setSignalPos(1)
-        elif cciValue <= self.cciShort:
+        elif self.cciValue <= self.cciShort:
             self.setSignalPos(-1)
         else:
             self.setSignalPos(0)
@@ -217,25 +226,27 @@ class AtrSignal(CtaSignal):
         """15分钟K线更新"""
         self.am.updateBar(bar)
 
+        print bar.datetime
+        print "@atrSignal"
+        print "atr inited: ", self.am.inited
+
         if not self.am.inited:
             self.setSignalPos(0)
+            return
 
         atrArray = self.am.atr(self.atrWindow, array=True)
         self.atrValue = atrArray[-1]
         atrMa = atrArray[-self.atrWindow:].mean()
 
+
+        print "atrValue: ", self.atrValue
+
         # 趋势增强
         if self.atrValue > atrMa:
             self.setSignalPos(1)
-        # elif self.atrValue < atrMa:
-        #     self.setSignalPos(-1)
         else:
             self.setSignalPos(0)
-        # 记录log
-        # log = "-----" * 10 + "\n@BollSignal\n" + \
-        #       "bar.datetime: {0}\n".format(bar.datetime) + \
-        #       "atrValue: {0}; SignalPos: {1}\n".format(self.atrValue, self.signalPos)
-        # self.writeCtaLog(log)
+
 ########################################################################
 class TrailingStopSignal(CtaSignal):
     """出场信号"""
@@ -244,10 +255,10 @@ class TrailingStopSignal(CtaSignal):
     def __init__(self):
         """Constructor"""
         super(TrailingStopSignal, self).__init__()
-        self.atrWindow = 30
-        self.slMultiplier = 2
+        # self.atrWindow = 30
+        self.slMultiplier = 5
         self.bg = BarGenerator(self.onBar,15, self.on15Bar)
-
+        self.signalPos = 100
         # 当前持仓
         self.holdPos = 0
         # 当前atr值
@@ -267,28 +278,42 @@ class TrailingStopSignal(CtaSignal):
     # ----------------------------------------------------------------------
     def onBar(self, bar):
         """K线更新"""
-        if self.holdPos != 0:
-            self.bg.updateBar(bar)
+        self.bg.updateBar(bar)
+        # print "@onBar"
 
     # ----------------------------------------------------------------------
     def on15Bar(self,bar):
-
+        # print "@on15Bar"
         if self.holdPos > 0:
             self.intraTradeHigh = max(self.intraTradeHigh, bar.high)
             self.longStop = self.intraTradeHigh - self.atrValue * self.slMultiplier
+
+            # print bar.datetime
+            # print "atrValue: ", self.atrValue
+            # print "holdPos: ", self.holdPos
+            # print "longStop: ",self.longStop
+            # print "close: ", bar.close
+
             if self.longStop > bar.close:
                 self.setSignalPos(0)
+                # print "tailingPos: ", self.getSignalPos()
 
         elif self.holdPos < 0:
             self.intraTradeLow = min(self.intraTradeLow, bar.low)
             self.shortStop = self.intraTradeLow + self.atrValue * self.slMultiplier
+
+            # print bar.datetime
+            # print "atrValue: ", self.atrValue
+            # print "holdPos: ", self.holdPos
+            # print "shortStop: ",self.shortStop
+            # print "close: ", bar.close
+
             if self.shortStop < bar.close:
                 self.setSignalPos(0)
-            # elif self.stopExit < bar.close:
-            #     self.setSignalPos(0)
 
+        elif self.holdPos == 0:
         # 空仓时返回100
-        self.setSignalPos(100)
+            self.setSignalPos(100)
 
 ########################################################################
 class MultiSignalStrategy(TargetPosTemplate):
@@ -337,7 +362,7 @@ class MultiSignalStrategy(TargetPosTemplate):
 
         self.entryPriceList = []
         self.avgEntryPrice = 0.0
-        self.exitOnLossStop = 2
+        # self.exitOnLossStop = 2
 
         self.bg = BarGenerator(self.onBar, 15, self.on15Bar)
     #----------------------------------------------------------------------
@@ -387,14 +412,10 @@ class MultiSignalStrategy(TargetPosTemplate):
         self.bollSignal.onBar(bar)
 
         self.trailingStopSignal.atrValue = self.atrSignal.atrValue
+        # self.trailingStopSignal.atrValue = 5
         self.trailingStopSignal.onBar(bar)
 
-        # 记录log
-        log = "-----" * 10 + "\n@onBar\n" + \
-              "bar.datetime: {0}\n".format(bar.datetime) + \
-              "atr: {0}; \n".format(self.atrSignal.atrValue)
 
-        self.writeCtaLog(log)
         self.bg.updateBar(bar)
 
 
@@ -409,66 +430,87 @@ class MultiSignalStrategy(TargetPosTemplate):
         self.signalPos['cci'] = self.cciSignal.getSignalPos()
         self.signalPos['boll'] = self.bollSignal.getSignalPos()
 
-        if self.caculatePos(bar):
+        # 记录log
+        log = "-----" * 10 + "\n@on15Bar\n" + \
+              "bar.datetime: {0}\n".format(bar.datetime) + \
+              "cci: {0}; atr: {1}; trailing: {2}\n".format(self.signalPos['cci'], self.signalPos['atr'],self.trailingStopSignal.signalPos) +\
+              "pos: {0}\n".format(self.pos)+\
+            "cciValue: {0}, atrValue: {1}\n".format(self.cciSignal.cciValue,self.atrSignal.atrValue)
+        self.writeCtaLog(log)
 
-            # 记录log
-            log = '[Zeros]'
-            self.writeCtaLog(log)
+        self.caculatePos(bar)
 
-            # 重置信号
-            self.atrSignal.signalPos = 0
-            self.cciSignal.signalPos = 0
-            self.bollSignal.signalPos = 0
-            self.trailingStopSignal.signalPos = 100
-
-        self.putEvent()
+        # 重置信号
+        # self.cciSignal = CciSignal()
+        # self.trailingStopSignal = TrailingStopSignal()
+        # self.bollSignal = BollSignal()
+        # self.atrSignal = AtrSignal()
+        #
+        # # 记录log
+        # log = '[Zeros]\n' + \
+        #       "cci: {0}; atr: {1}; trailing: {2}\n".format(self.cciSignal.getSignalPos(), self.atrSignal.getSignalPos(),
+        #                                                    self.trailingStopSignal.signalPos) + \
+        #       "pos: {0}\n".format(self.pos)
+        # self.writeCtaLog(log)
 
 
     def caculatePos(self, bar):
         """
         计算仓位
-        :return: 1:仓位有变化；0：仓位无变化
         """
-
         # 记录log
         log = "-----" * 10 + "\n@caculatePos\n" + \
               "bar.datetime: {0}\n".format(bar.datetime) + \
               "cci: {0}; atr: {1}; trailing: {2}\n".format(self.signalPos['cci'], self.signalPos['atr'],self.trailingStopSignal.signalPos) +\
               "pos: {0}\n".format(self.pos)
         self.writeCtaLog(log)
-
         # 开仓
-        if self.pos == 0:
-            if ((self.signalPos['cci'] == 1) and (self.signalPos['atr'] == 1)) or \
-                    ((self.signalPos['cci'] == -1) and (self.signalPos['atr'] == 1)):
-                self.setTargetPos(self.signalPos['cci'] * self.fixedSize)
+        if self.pos == 0 and self.signalPos['atr'] == 1:
+            if (self.signalPos['cci'] == 1):
 
                 # 记录log
-                log = '[Open]'
+                log = '\n [Buy]\n'
                 self.writeCtaLog(log)
 
-                return 1
-        else:
-        # 记录log
+                self.setTargetPos(self.fixedSize)
+            if  (self.signalPos['cci'] == -1):
+                # 记录log
+                log = '\n [Short]\n'
+                self.writeCtaLog(log)
+                self.setTargetPos(-1 * self.fixedSize)
+        # 平仓
+        if self.pos != 0 and self.trailingStopSignal.getSignalPos() == 0:
+
+            # 记录log
             log = "-----" * 10 + "\n@trailingStop\n" + \
               "bar.datetime: {0}\n".format(bar.datetime) + \
               "atr: {0}; intraHigh: {1}; intraLow: {2}\n".format(self.trailingStopSignal.atrValue, self.trailingStopSignal.intraTradeHigh,
                                                            self.trailingStopSignal.intraTradeLow) + \
               "holdpos: {0}\n".format(self.trailingStopSignal.holdPos) +\
                 "longStop: {0}; shortStop: {1}\n".format(self.trailingStopSignal.longStop,self.trailingStopSignal.shortStop) +\
-              "close: {0}\n".format(bar.close)
+              "close: {0}\n".format(bar.close) +\
+                "tailingStop: {0}\n".format(self.trailingStopSignal.getSignalPos())
             self.writeCtaLog(log)
 
-        # 平仓
-            if self.trailingStopSignal.getSignalPos() == 0:
-                self.setTargetPos(0)
-
+            if self.pos > 0:
                 # 记录log
-                log = '[Close]'
+                log = '\n [Sell]\n'
                 self.writeCtaLog(log)
-                return 1
-        return 0
 
+            elif self.pos < 0:
+                # 记录log
+                log = '\n [Cover]\n'
+                self.writeCtaLog(log)
+            # 重置信号
+            # self.atrSignal.setSignalPos(0)
+            # self.cciSignal.setSignalPos(0)
+            # self.bollSignal.setSignalPos(0)
+            self.atrSignal=AtrSignal()
+            self.cciSignal=CciSignal()
+            self.bollSignal=BollSignal()
+
+            # 设置策略仓位
+            self.setTargetPos(0)
 
     #----------------------------------------------------------------------
     def onOrder(self, order):
@@ -477,21 +519,24 @@ class MultiSignalStrategy(TargetPosTemplate):
         # 对于开仓，记录相关价格
         if order.direction == DIRECTION_LONG and order.offset == OFFSET_OPEN:
             if order.totalVolume == order.tradedVolume:
-                self.trailingStopSignal.holdPos = self.pos
+                # self.trailingStopSignal.holdPos = self.pos
                 # 更新入场价列表，更新平均入场价
                 self.entryPriceList.append(order.price)
                 self.avgEntryPrice = sum(self.entryPriceList) / len(self.entryPriceList)
-                self.trailingStopSignal.stopExit = round(self.avgEntryPrice * (100 - self.exitOnLossStop) / 100)  # 固定止损价
+                self.trailingStopSignal.intraTradeHigh = self.avgEntryPrice
+                # self.trailingStopSignal.stopExit = round(self.avgEntryPrice * (100 - self.exitOnLossStop) / 100)  # 固定止损价
 
         elif order.direction == DIRECTION_SHORT and order.offset == OFFSET_OPEN:
             # 更新入场价列表，更新平均入场价
             if order.totalVolume == order.tradedVolume:
-                self.trailingStopSignal.holdPos = self.pos
+                # self.trailingStopSignal.holdPos = self.pos
                 # 更新入场价列表，更新平均入场价
                 self.entryPriceList.append(order.price)
                 self.avgEntryPrice = sum(self.entryPriceList) / len(self.entryPriceList)
-                self.trailingStopSignal.stopExit = round(self.avgEntryPrice * (1 + self.exitOnLossStop) / 100)  # 固定止损价
+                self.trailingStopSignal.intraTradeLow = self.avgEntryPrice
+                # self.trailingStopSignal.stopExit = round(self.avgEntryPrice * (1 + self.exitOnLossStop) / 100)  # 固定止损价
 
+        self.trailingStopSignal.holdPos = self.pos
         self.putEvent()
     #----------------------------------------------------------------------
     def onTrade(self, trade):
@@ -512,7 +557,7 @@ if __name__ == "__main__":
     # 设置回测使用的数据
     engine.setBacktestingMode(engine.BAR_MODE)  # 设置引擎的回测模式为K线
     engine.setDatabase(dbName, symbol)  # 设置使用的历史数据库
-    engine.setStartDate('20170101',1)  # 设置回测用的数据起始日期
+    engine.setStartDate('20130101',1)  # 设置回测用的数据起始日期
     engine.setEndDate('20171231')
     # 配置回测引擎参数
     engine.setSlippage(2)  # 设置滑点为股指1跳
@@ -527,7 +572,7 @@ if __name__ == "__main__":
     engine.initStrategy(MultiSignalStrategy, d)
     # 运行回测
     engine.runBacktesting()  # 运行回测
-    # engine.showBacktestingResult()
+    engine.showBacktestingResult()
     # engine.showDailyResult()
     d = engine.calculateBacktestingResult()
 
